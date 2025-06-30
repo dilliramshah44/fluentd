@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  fluentd:
+    build: .
+    container_name: fluentd
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./fluent.conf:/fluentd/etc/fluent.conf:ro
+      - ./log:/fluentd/log
+    environment:
+      AZURE_WORKSPACE_ID: ${AZURE_WORKSPACE_ID}
+      AZURE_SHARED_KEY: ${AZURE_SHARED_KEY}
+      FLUENTD_CONF: fluent.conf
+    ports:
+      - "24224:24224"
+    restart: always
